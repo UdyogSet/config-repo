@@ -1,13 +1,22 @@
-server:
-  port: 8761
-
 spring:
   application:
     name: eureka-server
+  config:
+    import: optional:configserver:http://localhost:8888  # Import config from Config Server (optional so it doesn't fail if Config Server is not available)
+  cloud:
+    config:
+      uri: http://localhost:8888   # URL of your Config Server
+      fail-fast: false             # Don't fail if config server is not available initially
+
+# Minimal bootstrap config - full config will come from config server
+server:
+  port: 8761
 
 eureka:
+  instance:
+    hostname: localhost
   client:
-    register-with-eureka: false
-    fetch-registry: false
-  server:
-    wait-time-in-ms-when-sync-empty: 0
+    register-with-eureka: false  # Don't register with itself
+    fetch-registry: false        # Don't fetch registry from peers
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
