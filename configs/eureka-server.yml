@@ -20,3 +20,7 @@ eureka:
     fetch-registry: false        # Don't fetch registry from peers
     service-url:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+logging:
+  level:
+    root: DEBUG
