@@ -14,3 +14,7 @@ cloud:
          default-label: main  # branch name
          search-paths:
            - config
+           
+logging:
+  level:
+    org.springframework.cloud.config: DEBUG
