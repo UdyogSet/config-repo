@@ -5,16 +5,12 @@ spring:
   application:
     name: config-server
 
-cloud:
-   config:
-     server:
-       git:
-         uri: https://github.com/UdyogSet/config-repo.git
-         clone-on-start: true
-         default-label: main  # branch name
-         search-paths:
-           - config
-           
-logging:
-  level:
-    org.springframework.cloud.config: DEBUG
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/UdyogSet/config-repo.git
+          clone-on-start: true
+          default-label: main  # branch name
+          search-paths:
+            - config
