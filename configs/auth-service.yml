@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: auth-server
+  config:
+    import: optional:configserver:http://localhost:8888  # Import from Config Server (optional)
+  cloud:
+    config:
+      uri: http://localhost:8888   # URL of your Config Server
+      fail-fast: false             # Don't fail if Config Server is not available initially
+
+server:
+  port: 8001
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    initial-instance-info-replication-interval-seconds: 30
+    registry-fetch-interval-seconds: 30
+
