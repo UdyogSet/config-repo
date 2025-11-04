@@ -6,14 +6,20 @@ spring:
       uri: http://localhost:8888   # URL of your Config Server
       fail-fast: false             # Don't fail if Config Server is not available initially
     gateway:
-      discovery:
-        locator:
-          enabled: true
-      routes:
-        - id: auth
-          uri: http://localhost:8001
-          predicates:
-            - Path=/api/v1/auth/**
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+          routes:
+            - id: auth
+              uri: http://localhost:8001
+              predicates:
+                - Path=/api/v1/auth/**
+            - id: user
+              uri: http://localhost:8002
+              predicates:
+                - Path=/api/v1/user/**
 
   application:
     name: api-gateway
