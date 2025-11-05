@@ -262,6 +262,35 @@ services:
       timeout: 10s
       retries: 5
       start_period: 40s
+# Notification Service
+  notification-service:
+    build:
+      context: ../communication-service
+      dockerfile: Dockerfile
+    container_name: notification-service
+    ports:
+      - "8010:8010"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+      - MANAGEMENT_TRACING_SAMPLING_PROBABILITY=1.0
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      zipkin:
+        condition: service_healthy
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8010/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
 
   # Zipkin Service (Eureka Registration)
   zipkin-server:
