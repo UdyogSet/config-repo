@@ -1,6 +1,6 @@
 spring:
   application:
-    name: auth-server
+    name: communication-server
   config:
     import: optional:configserver:http://localhost:8888  # Import from Config Server (optional)
   cloud:
@@ -37,9 +37,31 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: false
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: communication-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.value.default.type: com.udhyogsetu.communication_service.dto.EmailEvent
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 server:
-  port: 8001
+  port: 8010
 
 eureka:
   client:
@@ -50,23 +72,14 @@ eureka:
     initial-instance-info-replication-interval-seconds: 30
     registry-fetch-interval-seconds: 30
 
-spring:
-  data:
-    redis:
-      host: localhost
-      port: 6379
-  kafka:
-    bootstrap-servers: localhost:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      acks: all
-      retries: 3
-      properties:
-        spring.json.type.mapping: emailEvent:com.udhyogsetu.auth_service.dto.EmailEvent
-
 app:
+  seeder:
+    enabled: true
+    email-template:
+      enabled: true
   kafka:
     topic:
       email: email-events
+    consumer:
+      group-id: communication-service-group
 
