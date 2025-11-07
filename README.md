@@ -4,7 +4,7 @@ This stack is managed from this `config-repo` folder. All commands below assume 
 
 ## Prerequisites
 - Docker Desktop (with Docker Compose V2)
-- Ports used: 5432, 8761, 8888, 8764, 9411, 9412, 8081, 8001, 8002, 9092, 8085, 6379
+- Ports used: 5432, 8761, 8888, 8764, 9411, 9412, 8081, 8001, 8002, 5672, 15672, 6379
 
 ## Start the full stack (build + up)
 ```bash
@@ -49,9 +49,10 @@ docker compose up -d --scale user-service=2
 - Auth Service: http://localhost:8001/actuator/health
 - User Service: http://localhost:8002/actuator/health
 
-## Kafka
-- Kafka Broker: `localhost:9092`
-- Kafka UI: http://localhost:8085
+## RabbitMQ
+- RabbitMQ Broker: `localhost:5672`
+- RabbitMQ Management UI: http://localhost:15672 (username: admin, password: admin)
+
 ## Redis
 - Redis Server: `localhost:6379`
 
@@ -66,19 +67,19 @@ GET foo
 PING
 ```
 
-### Quick start (topics, produce, consume)
+### Quick start (exchanges, queues, produce, consume)
 ```bash
-# Create a topic (from inside the kafka container)
-docker compose exec kafka bash -c "kafka-topics.sh --create --topic demo-topic --bootstrap-server kafka:9092 --replication-factor 1 --partitions 1"
+# Access RabbitMQ Management UI
+# Open browser: http://localhost:15672
+# Login: admin / admin
 
-# List topics
-docker compose exec kafka bash -c "kafka-topics.sh --list --bootstrap-server kafka:9092"
+# Or use RabbitMQ CLI (from inside the rabbitmq container)
+docker compose exec rabbitmq rabbitmqctl list_exchanges
+docker compose exec rabbitmq rabbitmqctl list_queues
+docker compose exec rabbitmq rabbitmqctl list_bindings
 
-# Start a consumer (terminal 1)
-docker compose exec kafka bash -c "kafka-console-consumer.sh --topic demo-topic --bootstrap-server kafka:9092 --from-beginning"
-
-# Produce messages (terminal 2)
-docker compose exec -it kafka bash -c "kafka-console-producer.sh --topic demo-topic --bootstrap-server kafka:9092"
+# Publish a test message (using rabbitmqadmin or Management UI)
+# Or use Spring AMQP RabbitTemplate in your services
 ```
 
 ## Clean up images and volumes

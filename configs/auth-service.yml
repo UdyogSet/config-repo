@@ -55,18 +55,19 @@ spring:
     redis:
       host: localhost
       port: 6379
-  kafka:
-    bootstrap-servers: localhost:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      acks: all
-      retries: 3
-      properties:
-        spring.json.type.mapping: emailEvent:com.udhyogsetu.auth_service.dto.EmailEvent
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+    virtual-host: /
 
 app:
-  kafka:
-    topic:
+  rabbitmq:
+    exchange:
+      email: email-exchange
+    queue:
+      email: email-events
+    routing-key:
       email: email-events
 
