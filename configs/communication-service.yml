@@ -1,18 +1,21 @@
 spring:
   application:
     name: communication-server
+
   config:
     import: optional:configserver:http://localhost:8888  # Import from Config Server (optional)
+
   cloud:
     config:
       uri: http://localhost:8888   # URL of your Config Server
       fail-fast: false             # Don't fail if Config Server is not available initially
+
   # Master database configuration (for tenant metadata and master data)
   datasource:
     master:
-      url: jdbc:postgresql://localhost:5432/udhyogsetu_master
-      username: postgres
-      password: postgres
+      url: jdbc:postgresql://pgdb.codequality.us:5433/udhyogsetu_master?TimeZone=Asia/Kolkata
+      username: codequality
+      password: DBplbtC8Ini1RZrrPg
       driver-class-name: org.postgresql.Driver
       hikari:
         maximum-pool-size: 10
@@ -20,14 +23,16 @@ spring:
         connection-timeout: 30000
         max-lifetime: 300000
         idle-timeout: 600000
+
     # Tenant database connection pool settings
     tenant:
-      base-url: jdbc:postgresql://localhost:5432/
-      username: postgres
-      password: postgres
+      base-url: jdbc:postgresql://pgdb.codequality.us:5433/
+      username: codequality
+      password: DBplbtC8Ini1RZrrPg
       pool-size: 10
       max-lifetime: 300000
       connection-timeout: 30000
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -37,11 +42,12 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: false
+
   rabbitmq:
-    host: localhost
+    host: queue.codequality.us
     port: 5672
-    username: admin
-    password: admin
+    username: codequality
+    password: plbtC8Ini1RZrr
     virtual-host: /
     listener:
       simple:
@@ -49,11 +55,12 @@ spring:
         prefetch: 1
         concurrency: 1
         max-concurrency: 10
+
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${MAIL_USERNAME:}
-    password: ${MAIL_PASSWORD:}
+    username: info.kaushikparmar@gmail.com
+    password: wwcbyibphshioyke
     properties:
       mail:
         smtp:
@@ -85,4 +92,3 @@ app:
       email: email-events
     routing-key:
       email: email-events
-

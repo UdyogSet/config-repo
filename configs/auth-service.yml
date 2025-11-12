@@ -10,7 +10,7 @@ spring:
   # Master database configuration (for tenant metadata and master data)
   datasource:
     master:
-      url: jdbc:postgresql://localhost:5432/udhyogsetu_master
+      url: jdbc:postgresql://localhost:5432/udhyogsetu_master?TimeZone=Asia/Kolkata
       username: postgres
       password: postgres
       driver-class-name: org.postgresql.Driver
