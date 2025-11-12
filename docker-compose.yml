@@ -207,6 +207,36 @@ services:
       retries: 5
       start_period: 40s
 
+# User Service
+  user-service:
+    build:
+      context: ../user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "8002:8002"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+      - MANAGEMENT_TRACING_SAMPLING_PROBABILITY=1.0
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      zipkin:
+        condition: service_healthy
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8002/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
 # Tenant Service
   tenant-service:
     build:
@@ -236,16 +266,15 @@ services:
       timeout: 10s
       retries: 5
       start_period: 40s
-  # User Service
-
-
-  user-service:
+  
+# Master Service
+  master-service:
     build:
-      context: ../user-service
+      context: ../master-sevice
       dockerfile: Dockerfile
-    container_name: user-service
+    container_name: master-service
     ports:
-      - "8002:8002"
+      - "8004:8004"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://discovery-server:8761/eureka/
@@ -259,14 +288,17 @@ services:
         condition: service_healthy
       zipkin:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
       - microservices-network
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8002/actuator/health"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8001/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 40s
+
 # Notification Service
   notification-service:
     build:
