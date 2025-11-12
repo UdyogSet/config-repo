@@ -270,8 +270,8 @@ services:
 # Master Service
   master-service:
     build:
-      context: ../master-sevice
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: master-sevice/Dockerfile
     container_name: master-service
     ports:
       - "8004:8004"
@@ -293,7 +293,7 @@ services:
     networks:
       - microservices-network
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8001/actuator/health"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8004/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 5
