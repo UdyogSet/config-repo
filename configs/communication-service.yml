@@ -10,45 +10,14 @@ spring:
       uri: http://localhost:8888   # URL of your Config Server
       fail-fast: false             # Don't fail if Config Server is not available initially
 
-  # Master database configuration (for tenant metadata and master data)
-  datasource:
-    master:
-      url: jdbc:postgresql://pgdb.codequality.us:5433/udhyogsetu_master?TimeZone=Asia/Kolkata
-      username: codequality
-      password: DBplbtC8Ini1RZrrPg
-      driver-class-name: org.postgresql.Driver
-      hikari:
-        maximum-pool-size: 10
-        minimum-idle: 2
-        connection-timeout: 30000
-        max-lifetime: 300000
-        idle-timeout: 600000
+  # Database, Redis, and RabbitMQ credentials are loaded from common application.yml
 
-    # Tenant database connection pool settings
-    tenant:
-      base-url: jdbc:postgresql://pgdb.codequality.us:5433/
-      username: codequality
-      password: DBplbtC8Ini1RZrrPg
-      pool-size: 10
-      max-lifetime: 300000
-      connection-timeout: 30000
-
+  # Service-specific JPA overrides
   jpa:
-    hibernate:
-      ddl-auto: update
-    open-in-view: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
     show-sql: false
 
+  # Service-specific RabbitMQ listener configuration
   rabbitmq:
-    host: queue.codequality.us
-    port: 5672
-    username: codequality
-    password: plbtC8Ini1RZrr
-    virtual-host: /
     listener:
       simple:
         acknowledge-mode: manual

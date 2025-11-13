@@ -7,35 +7,11 @@ spring:
     config:
       uri: http://localhost:8888   # URL of your Config Server
       fail-fast: false             # Don't fail if Config Server is not available initially
-  # Master database configuration (for tenant metadata and master data)
-  datasource:
-    master:
-      url: jdbc:postgresql://localhost:5432/udhyogsetu_master?TimeZone=Asia/Kolkata
-      username: postgres
-      password: postgres
-      driver-class-name: org.postgresql.Driver
-      hikari:
-        maximum-pool-size: 10
-        minimum-idle: 2
-        connection-timeout: 30000
-        max-lifetime: 300000
-        idle-timeout: 600000
-    # Tenant database connection pool settings
-    tenant:
-      base-url: jdbc:postgresql://localhost:5432/
-      username: postgres
-      password: postgres
-      pool-size: 10
-      max-lifetime: 300000
-      connection-timeout: 30000
+  
+  # Database, Redis, and RabbitMQ credentials are loaded from common application.yml
+
+  # Service-specific JPA overrides
   jpa:
-    hibernate:
-      ddl-auto: update
-    open-in-view: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
     show-sql: false
 
 server:
@@ -49,18 +25,6 @@ eureka:
       defaultZone: http://localhost:8761/eureka
     initial-instance-info-replication-interval-seconds: 30
     registry-fetch-interval-seconds: 30
-
-spring:
-  data:
-    redis:
-      host: localhost
-      port: 6379
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: admin
-    password: admin
-    virtual-host: /
 
 app:
   rabbitmq:

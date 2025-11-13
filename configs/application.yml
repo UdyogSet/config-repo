@@ -10,3 +10,65 @@ management:
   endpoint:
     health:
       show-details: always
+
+# Common Database Configuration (shared across all services)
+spring:
+  # Master database configuration (for tenant metadata and master data)
+  datasource:
+    master:
+      url: jdbc:postgresql://pgdb.codequality.us:5433/udhyogsetu_master?TimeZone=Asia/Kolkata
+      username: codequality
+      password: DBplbtC8Ini1RZrrPg
+      driver-class-name: org.postgresql.Driver
+      hikari:
+        maximum-pool-size: 10
+        minimum-idle: 2
+        connection-timeout: 30000
+        max-lifetime: 300000
+        idle-timeout: 600000
+
+    # Tenant database connection pool settings
+    tenant:
+      base-url: jdbc:postgresql://pgdb.codequality.us:5433/
+      username: codequality
+      password: DBplbtC8Ini1RZrrPg
+      pool-size: 10
+      max-lifetime: 300000
+      connection-timeout: 30000
+
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  # Redis Configuration (shared across all services)
+  data:
+    redis:
+      host: pgdb.codequality.us
+      port: 6380
+      password: R3dis$9uP3rS3cUr3!
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+
+  # RabbitMQ Configuration (shared across all services)
+  rabbitmq:
+    host: queue.codequality.us
+    port: 5672
+    username: codequality
+    password: plbtC8Ini1RZrr
+    virtual-host: /
+    listener:
+      simple:
+        acknowledge-mode: manual
+        prefetch: 1
+        concurrency: 1
+        max-concurrency: 10

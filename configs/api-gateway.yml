@@ -8,57 +8,16 @@ spring:
       uri: http://localhost:8888   # URL of your Config Server
       fail-fast: false             # Don't fail if Config Server is not available initially
   
-  # Master database configuration
-  datasource:
-    master:
-      url: jdbc:postgresql://localhost:5432/udhyogsetu_master
-      username: postgres
-      password: postgres
-      driver-class-name: org.postgresql.Driver
-      hikari:
-        maximum-pool-size: 10
-        minimum-idle: 2
-        connection-timeout: 30000
-        max-lifetime: 300000
-    
-    # Tenant database settings
-    tenant:
-      base-url: jdbc:postgresql://localhost:5432/
-      username: postgres
-      password: postgres
-      pool-size: 10
-      max-lifetime: 300000
-      connection-timeout: 30000
+  # Database, Redis, and RabbitMQ credentials are loaded from common application.yml
 
-  # JPA Configuration
+  # Service-specific JPA Configuration
   jpa:
     hibernate:
       ddl-auto: none  # We manage schema manually
     show-sql: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
 
-  # Redis Configuration
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      timeout: 2000ms
-      lettuce:
-        pool:
-          max-active: 8
-          max-idle: 8
-          min-idle: 0
-
-  # RabbitMQ Configuration
+  # Service-specific RabbitMQ listener configuration
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: admin
-    password: admin
-    virtual-host: /
     listener:
       simple:
         acknowledge-mode: manual
