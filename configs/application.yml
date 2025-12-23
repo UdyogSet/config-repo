@@ -1,7 +1,7 @@
 logging:
   level:
     root: INFO
-    
+
 management:
   endpoints:
     web:
@@ -16,9 +16,15 @@ spring:
   # Master database configuration (for tenant metadata and master data)
   datasource:
     master:
-      url: jdbc:postgresql://pgdb.codequality.us:5433/udhyogsetu_master?TimeZone=Asia/Kolkata
-      username: codequality
-      password: DBplbtC8Ini1RZrrPg
+      # Remote configuration
+      # url: jdbc:postgresql://pgdb.codequality.us:5433/udhyogsetu_master?TimeZone=Asia/Kolkata
+      # username: codequality
+      # password: DBplbtC8Ini1RZrrPg
+
+      # Localhost configuration
+      url: jdbc:postgresql://localhost:5432/udhyogsetu_master?TimeZone=Asia/Kolkata
+      username: postgres
+      password: postgres
       driver-class-name: org.postgresql.Driver
       hikari:
         maximum-pool-size: 10
@@ -29,9 +35,15 @@ spring:
 
     # Tenant database connection pool settings
     tenant:
-      base-url: jdbc:postgresql://pgdb.codequality.us:5433/
-      username: codequality
-      password: DBplbtC8Ini1RZrrPg
+      # Remote configuration
+      # base-url: jdbc:postgresql://pgdb.codequality.us:5433/
+      # username: codequality
+      # password: DBplbtC8Ini1RZrrPg
+
+      # Localhost configuration
+      base-url: jdbc:postgresql://localhost:5432/
+      username: postgres
+      password: postgres
       pool-size: 10
       max-lifetime: 300000
       connection-timeout: 30000
@@ -49,9 +61,15 @@ spring:
   # Redis Configuration (shared across all services)
   data:
     redis:
-      host: pgdb.codequality.us
-      port: 6380
-      password: R3dis$9uP3rS3cUr3!
+      # Remote configuration
+      # host: pgdb.codequality.us
+      # port: 6380
+      # password: R3dis$9uP3rS3cUr3!
+
+      # Localhost configuration
+      host: localhost
+      port: 6379
+      password:
       timeout: 2000ms
       lettuce:
         pool:
@@ -61,10 +79,17 @@ spring:
 
   # RabbitMQ Configuration (shared across all services)
   rabbitmq:
-    host: queue.codequality.us
+    # Remote configuration
+    # host: queue.codequality.us
+    # port: 5672
+    # username: codequality
+    # password: plbtC8Ini1RZrr
+
+    # Localhost configuration
+    host: localhost
     port: 5672
-    username: codequality
-    password: plbtC8Ini1RZrr
+    username: guest
+    password: guest
     virtual-host: /
     listener:
       simple:
